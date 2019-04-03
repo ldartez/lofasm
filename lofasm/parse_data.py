@@ -523,8 +523,6 @@ class LoFASM_burst:
                     self.cross[k].seek(8, 1)
                 raw.seek(4096, 1)
 
-                
-
     def _unpack_burst(self, burst_string):
         '''unpack contents of burst_string into class attributes
         '''

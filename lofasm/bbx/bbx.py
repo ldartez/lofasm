@@ -35,6 +35,7 @@ class LofasmFile(object):
         self.fpath = lofasm_file
         self.fname = os.path.basename(lofasm_file)
 
+
         # validate file open mode
         if mode.lower() not in ('read', 'write'):
             raise ValueError("Unrecognized file mode: {}".format(mode.lower()))
@@ -115,9 +116,10 @@ class LofasmFile(object):
             dim1_bins, dim2_bins = np.shape(data)
             data = data.flatten()
         elif data.ndim == 1:
+            dim1_bins, = np.shape(data)
+            dim2_bins = 1
             data = data.flatten()
-            dim2_bins = len(data)
-            dim1_bins = 1
+
         else:
             raise NotImplementedError, "Currently only up to 2d data is supported."
 
@@ -199,6 +201,7 @@ class LofasmFile(object):
 
             self._debug('parsing real data')
             nbytes = self.freqbins * self.nbits / 8
+
             self.data = np.zeros((int(dim1_len), int(self.dim2_len)),
                                  dtype=np.float64)
             self.dtype = self.data.dtype
@@ -280,6 +283,7 @@ class LofasmFile(object):
                 i += 2
             self._fp.write(struct.pack(cplxfmt, *cplxdata))
         else:
+            self._debug("Writing real valued data")
             self._fp.write(struct.pack(realfmt, *self.data))
 
     ###################
@@ -316,6 +320,9 @@ class LofasmFile(object):
             val = ':'.join(contents[1:])
             self.header[key] = val.strip()
             line = self._fp.readline().strip()
+
+        # record number of bytes in header
+        self.hdrLen = self._fp.tell()
 
         # check for hdr_type field first. This is how we determine what fields are required
         if 'hdr_type' not in self.header.keys():

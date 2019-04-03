@@ -1,0 +1,174 @@
+#!/usr/bin/env python
+
+from lofasm.bbx import bbx
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+
+
+def apply_rolling_norm(filt, data, r):
+    '''
+    Apply function filt on data as a rolling filter.
+    The radius, r, is the number of bins in each direction
+    to be include in the rolling window.
+
+    Parameters
+    ----------
+    filt : function
+        The filtering function to be applied as the normalization value
+        in a rolling window.
+    data : numpy.ndarray
+    '''
+
+    data = np.array(data) if not isinstance(data, np.ndarray) else data
+
+    N = len(data)
+    filtdata = np.zeros(N, dtype=data.dtype)
+    for i in range(N):
+
+        if i < r:
+            window = data[:i+r+1]
+        elif i > N-1-r:
+            window = data[i-r:]
+        else:
+            window = data[i-r:r+i+1]
+
+        # normalize to the result of filter function filt()
+        y = data[i]/filt(window)
+        filtdata[i] = y
+
+    return filtdata
+
+if __name__ == "__main__":
+    import argparse
+
+    def parse_bin_val(binArg):
+        '''parse bin command line argument
+        '''
+
+        if '-' in binArg:
+            try:
+                vals = tuple([int(x) for x in binArg.split('-')])
+            except ValueError as e:
+                emsg = "Bin values must be real positive integers. " + str(e)
+                raise ValueError(emsg)
+
+            if len(vals)==1 or len(vals)>2:
+                emsg = "Bad bin selection (-b) argument format: "
+                emsg += "{}. Expected `-b <start_bin>-<end_bin>`.".format(
+                    binArg)
+                raise ValueError(emsg)
+            elif vals[0] > vals[1]:
+                emsg = "low bin should be lower than the high bin: "
+                emsg += "low bin = {} high bin = {}".format(vals[0], vals[1])
+                raise ValueError(emsg)
+            elif vals[0] == vals[1]:
+                binval = tuple(vals[0])
+            else:
+                binval = vals
+        else:
+            try:
+                binval = (int(binArg),)
+            except ValueError as e:
+                emsg = "Bin value must be a real positive integer. " + str(e)
+                raise ValueError(emsg)
+
+        return binval
+
+    epilog = '''Example:
+    Say you have a 2-dimensional data block. To normalize the data by the 50th
+    percentile (the median) along axis 2 (columns) from bin 30 to 300
+    (inclusive) use `{fname} -a 2 -b 30-300 inputfile.bbx outputfile.bbx`.
+
+    It is possible to specify a range of bins and standalone bins
+    simultaneously. Below we specify bins 30-300 as well as bin 430:
+    `{fname} -a 2 -b 30-300 -b 430 inputfile.bbx outputfile.bbx`.
+    '''.format(fname=sys.argv[0])
+    p = argparse.ArgumentParser(description="Normalize BBX data by the nth\
+    percentile as a rolling filter.")
+    p.add_argument('bbxIn', help='Input bbx file')
+    p.add_argument('bbxOut', help='Output bbx file')
+    p.add_argument('-a', '--axis', type=int, default=1, dest='axis',
+                   choices=[1,2],
+                   help="""Axis over which to take the percentile.
+                   Defaults to 1. Typically, with a 2d data block axes 1 & 2
+                   correspond to row number & column number, respectively.""")
+    p.add_argument('-b', '--bins', type=str, default=['all'], action='append',
+                   help="""Bins over which to apply filter. By default, all
+                   bins along the selected axis are filtered.To select a single
+                   bin use '-b <bin number>'. You may select a range of bins with
+                   '<start>-<end>', where both endpoints are included.""")
+    p.add_argument('-r', '--radius', dest='r', type=int, default=10,
+                   help="rolling window radius. default is 10.")
+    p.add_argument('-n', type=float, default=50.,
+                   help="nth percentile. Default is the median (n=50).")
+    args = p.parse_args()
+
+    bbxin = bbx.LofasmFile(args.bbxIn)
+    bbxin.read_data()
+
+
+
+    def filt_func(x):
+        y = np.percentile(x, args.n, axis=args.axis-1)
+        print "data shape: {}".format(str(np.shape(x)))
+        print "filt_func: x={x}, n={n}, axis={axis}".format(x=x,n=args.n,axis=args.axis)
+        print "y shape: {}".format(np.shape(y))
+        return y
+
+    if args.axis > bbxin.data.ndim or args.axis <= 0:
+        print "data has {} dimensions but {} was requested.".format(
+            bbxin.data.ndim, args.axis)
+        sys.exit()
+
+    if bbxin.data.ndim > 2:
+        raise NotImplementedError("Only up to 2d data files supported.")
+
+    if args.axis==1 and bbxin.data.ndim==1:
+        bbxin.data = apply_rolling_filter(filt_func, bbxin.data, args.r)
+    else:
+        dataShape = np.shape(bbxin.data)
+
+        if args.axis==1:
+            if args.bins == ['all']:
+                cols = [(0, dataShape[1]-1)]
+            else:
+                bArgs = args.bins[1:]  # remove leading 'all' default element
+                cols = [parse_bin_val(b) for b in bArgs]
+
+            for c in cols:
+                print 'c: ', c
+                if len(c) == 1:
+                    d = bbxin.data[:, c[0]]
+                    y = apply_rolling_norm(filt_func, d, args.r)
+                    bbxin.data[:,c[0]] = y
+                else:
+                    d = bbxin.data[:, c[0]:c[1]+1]  # include endpoint
+                    y = apply_rolling_norm(filt_func, d, args.r)
+                    bbxin.data[:, c[0]:c[1]+1] = y
+
+        else:  # elif args.axis==2:
+            if args.bins == ['all']:
+                rows = [(0, dataShape[0]-1)]
+            else:
+                bArgs = args.bins[1:]  # remove leading 'all' default element
+                rows = [parse_bin_val(b) for b in bArgs]
+
+            for r in rows:
+                if len(r) == 1:
+                    d = bbxin.data[r[0], :]
+                    y = apply_rolling_norm(filt_func, d, args.r)
+                    bbxin.data[r[0], :] = y
+                else:
+                    d = bbxin.data[r[0]:r[1]+1, :]  # include endpoint
+                    y = apply_rolling_norm(filt_func, d, args.r)
+                    bbxin.data[r[0]:r[1]+1, :] = y
+
+        # write new file
+        print "Writing new file to disk."
+        gz = True if args.bbxIn.endswith('.gz') else False
+        nf = bbx.LofasmFile(args.bbxOut, mode='write', verbose=True, gz=gz,
+                            header=bbxin.header)
+        nf.add_data(bbxin.data)
+        nf.write()
+        nf.close()

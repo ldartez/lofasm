@@ -7,7 +7,6 @@ import os
 
 galaxy_model_files = [os.path.basename(f) for f in glob('lofasm/galaxy_model/*.dat')]
 
-
 setup(
     name='lofasm',
     version='0.1',
@@ -38,7 +37,9 @@ setup(
              'bin/normalize_data.py',
              'bin/clean_data.py',
              'bin/calibrate_plot.py',
-             'bin/explorebbx2d'],
+             'bin/explorebbx2d',
+             'bin/lfprintbbx',
+             'bin/lfpercentile'],
 
     description='LoFASM Tools',
     long_description=open('README.md').read(),

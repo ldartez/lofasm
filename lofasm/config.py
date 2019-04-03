@@ -9,7 +9,7 @@ def getConfig(cfgpath=os.path.join(os.environ['HOME'],
                  '.lofasm/lofasm.cfg')):
     '''
     return lofasm config parameters as a dictionary
-    '''            
+    '''
     try:
         return dict(np.loadtxt(cfgpath, dtype=str))
     except IOError:

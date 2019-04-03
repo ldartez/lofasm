@@ -52,7 +52,12 @@ BASELINE_ID = {
         'A' : 'AAA',
         'B' : 'BBB',
         'C' : 'CCC',
-        'D' : 'DDD'}
+        'D' : 'DDD'},
+    '5' : {
+        'A': 'A',
+        'B': 'B',
+        'C': 'C',
+        'D': 'D'}
     }
 BASELINES = ['AA', 'BB', 'CC', 'DD', 'AB', 'AC', 'AD', 'BC', 'BD', 'CD']
 

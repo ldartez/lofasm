@@ -196,7 +196,7 @@ class SkySource(object):
             station = self.station
 
         if self.coord.dec.rad < station.minDec.rad or self.coord.dec.rad > station.maxDec.rad:
-            raise ValueError, "Source must be within the FOV of {}.".format(statin.name)
+            raise ValueError, "Source must be within the FOV of {}.".format(station.name)
 
         stationLat = station.lat.rad
         srcDec = self.coord.dec.rad
