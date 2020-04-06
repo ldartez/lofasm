@@ -60,7 +60,7 @@ class data_handler(object):
                 except ValueError:
                     pass
             else:
-                print "Cannot parse start time header field {}".format(startt_repr)
+                print("Cannot parse start time header field {}".format(startt_repr))
 
 
             # Find the frequency bin corresponding to the given frequency
@@ -417,7 +417,7 @@ class calibrate(object):
                     elif sidereal_data_t[i] >= half_bin:
                         timebin = j+1
                     power.append(gall[freqchans[self.freqmhz]][timebin])
-                    print timebin
+                    print(timebin)
                     break
 
         return power

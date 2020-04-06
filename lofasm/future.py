@@ -31,10 +31,10 @@ class ComparableMixin(object):
 class LoFASM_file(ComparableMixin):
     def __init__(self, pathtofile):
         if os.path.isdir(pathtofile):
-            print "please provide a full path."
+            print("please provide a full path.")
             pass
         elif not os.path.isfile(pathtofile):
-            print pathtofile + " is not a normal file"
+            print(pathtofile + " is not a normal file")
             pass
         else:
             if len(pathtofile.split('/')) > 1:
@@ -116,7 +116,7 @@ class LoFASM_file(ComparableMixin):
 
 def get_total_file_size(fname):
     if not os.path.isfile(fname):
-        print "bad file name"
+        print("bad file name")
         return None
     else:
         size_cmd = "ls -l %s | awk '{print $5}'" % fname
@@ -126,8 +126,8 @@ def syscmd(cmd):
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
     (output, err) = proc.communicate()
     if err:
-        print "Error executing system command:",
-        print cmd
+        print("Error executing system command:",)
+        print(cmd)
     return output
          
 def file_datetime(filename):
@@ -137,7 +137,7 @@ def file_datetime(filename):
     if filename == '' or len(filename) < 22:
         pass
     elif filename[-7:] != '.lofasm':
-        print "What is this?"
+        print("What is this?")
         pass
     else:
         filename = filename.rstrip('.lofasm')
@@ -151,7 +151,7 @@ def file_datetime(filename):
         second = int(time[4:6])
         
         if (len(date+time) < 14):
-            print "can't parse file's date :("
+            print("can't parse file's date :(")
             pass
         else:
             return datetime.datetime(year, month, day, hour, minute, second)
@@ -164,10 +164,10 @@ def get_spectra_range(start_date, end_date, data_home=''):
 
     #now = datetime.datetime.now()
     #now = datetime.datetime(2014,8,2)
-    print "Start: ", start_date
+    print("Start: ", start_date)
     buffer_start = start_date
-    print "Buffer start: ", buffer_start
-    print "Buffer length: ", end_date - start_date
+    print("Buffer start: ", buffer_start)
+    print("Buffer length: ", end_date - start_date)
 
     file_ext = '.lofasm'
     dir_list = []

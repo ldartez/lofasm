@@ -39,7 +39,7 @@ class SkySource(object):
         '''
 
         if not isinstance(lofasm_station, lofasmStation):
-            raise TypeError, 'lofasmStation must be an instance of lofasm.station.lofasmStation'
+            raise(TypeError('lofasmStation must be an instance of lofasm.station.lofasmStation'))
 
         self.coord = SkyCoord(ra, dec, unit=unit)
         self.station = lofasm_station
@@ -122,7 +122,7 @@ class SkySource(object):
             if t.tzinfo is not pytz.utc:
                 t = datetime.datetime(t.year, t.month, t.day, t.hour, t.minute, t.second, t.microsecond, tzinfo=pytz.utc)
         except AttributeError:
-            raise TypeError, 'lofasm_station must be a datetime.datetime object'
+            raise(TypeError('lofasm_station must be a datetime.datetime object'))
 
         lofasm_station.observer.date = (t-self.epoch).total_seconds()/86400.0
 
@@ -142,7 +142,7 @@ class SkySource(object):
         '''
 
         if lofasm_station.isNull:
-            raise ValueError, 'lofasm_station must not be NULL.'
+            raise(ValueError('lofasm_station must not be NULL.'))
             return False
 
         alt, az = self.AltAz(t, lofasm_station)
@@ -196,7 +196,7 @@ class SkySource(object):
             station = self.station
 
         if self.coord.dec.rad < station.minDec.rad or self.coord.dec.rad > station.maxDec.rad:
-            raise ValueError, "Source must be within the FOV of {}.".format(statin.name)
+            raise(ValueError("Source must be within the FOV of {}.".format(statin.name)))
 
         stationLat = station.lat.rad
         srcDec = self.coord.dec.rad

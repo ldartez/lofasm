@@ -90,12 +90,12 @@ class FileListHandler(object):
                     if self._inMjdRange(mjd_timestamp):
                         file_start_mjds.append(mjd_timestamp)
                     else:
-                        print "  --Removing {}".format(f)
+                        print("  --Removing {}".format(f))
                         self.flist.remove(f)
                 else:
                     file_start_mjds.append(mjd_timestamp)
             except:
-                print "\nunable to process {}\n".format(f)
+                print("\nunable to process {}\n".format(f))
                 self.flist.remove(f)  # remove from file list
                 
             i += 1

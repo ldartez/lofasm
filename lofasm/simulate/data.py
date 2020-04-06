@@ -97,9 +97,9 @@ class RealPacket(DataPacket):
 				try:
 					bin_str += struct.pack(self._fmt_real, self.data[j][k])
 				except struct.error as err:
-					print err
-					print 'fmt: ', self._fmt_real
-					print 'val: ', self.data[j][k]
+					print(err)
+					print('fmt: ', self._fmt_real)
+					print('val: ', self.data[j][k])
 
 		return bin_str
 
@@ -319,7 +319,7 @@ class Burst(object):
 			self.packets[index] = packet
 
 		else:
-			print "Error: %i is not a valid index" % index
+			print("Error: %i is not a valid index" % index)
 
 
 

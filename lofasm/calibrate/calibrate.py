@@ -33,4 +33,4 @@ if __name__ == "__main__":
     fit = lfc.fitter(dh.data, g_power)
     cal_pars = fit.cal_pars()
 
-    print cal_pars
+    print(cal_pars)

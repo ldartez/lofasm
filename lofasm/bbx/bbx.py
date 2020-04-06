@@ -76,7 +76,7 @@ class LofasmFile(object):
                 if e.message == 'Not a gzipped file':
                     gz = False
                 else:
-                    raise IOError, e.message
+                    raise(IOError, e.message)
         elif mode == 'write':
             gz = True if gz else False
 
@@ -145,7 +145,7 @@ class LofasmFile(object):
             dim2_bins = len(data)
             dim1_bins = 1
         else:
-            raise NotImplementedError, "Currently only up to 2d data is supported."
+            raise(NotImplementedError, "Currently only up to 2d data is supported.")
 
         if self._new_file:
             # set header fields based on new data block for new file
@@ -163,10 +163,10 @@ class LofasmFile(object):
             new_iscplx = np.iscomplexobj(data)
 
             if old_iscplx != new_iscplx:
-                raise ValueError, "new data must match existing data realness"
+                raise(ValueError, "new data must match existing data realness")
 
             if str(dim2_bins) != str(self.dim2_len):
-                raise ValueError, "new data length for dim2 must match the existing data!"
+                raise(ValueError, "new data length for dim2 must match the existing data!")
             
             # update header values to reflect new data block dimensions
             # dim2 is left alone since that holds the frequency axis
@@ -218,7 +218,7 @@ class LofasmFile(object):
 
 
         else:
-            raise NotImplementedError("unknown file mode: {}".format(self.mode))
+            raise(NotImplementedError("unknown file mode: {}".format(self.mode)))
 
     def read_data(self, N=None):
         """Parse data block in LoFASM filterbank file and load into 
@@ -332,7 +332,7 @@ class LofasmFile(object):
         missing_keys = self._validate_header()
         if missing_keys:
             errmsg = "header missing required fields: {}".format(', '.join(missing_keys))
-            raise RuntimeError, errmsg
+            raise(RuntimeError, errmsg)
 
 
         N = self.data.size
@@ -359,7 +359,7 @@ class LofasmFile(object):
     ###################
     def _debug(self, msg):
         if self.debug:
-            print msg
+            print(msg)
             sys.stdout.flush()
 
     def _load_header(self):
@@ -368,17 +368,17 @@ class LofasmFile(object):
             if fsig.startswith('%'):
                 fsig = fsig.strip('%')
             elif self.gz:
-                raise IOError, "Unable to parse file. Unrecognizable file signature. Are you sure compression should be turned on?"
+                raise(IOError, "Unable to parse file. Unrecognizable file signature. Are you sure compression should be turned on?")
             else:
-                raise IOError, "Unable to parse file. Unrecognizable file signature."
+                raise(IOError, "Unable to parse file. Unrecognizable file signature.")
         except IOError as e:
             if self.gz and e.strerror == 'Not a gzipped file':
-                raise IOError, "Compression parameter is True but input file is not a gzipped file"
+                raise(IOError, "Compression parameter is True but input file is not a gzipped file")
             else:
-                raise IOError, e.message
+                raise(IOError, e.message)
 
         if fsig not in SUPPORTED_FILE_SIGNATURES:
-            raise NotImplementedError("{} is not a supported LoFASM file signature".format(fsig))
+            raise(NotImplementedError("{} is not a supported LoFASM file signature".format(fsig)))
 
         # populate header dictionary with header comment fields
         line = self._fp.readline().strip()
@@ -391,20 +391,20 @@ class LofasmFile(object):
 
         # check for hdr_type field first. This is how we determine what fields are required
         if 'hdr_type' not in self.header.keys():
-            raise RuntimeError("Missing Required comment field: hdr_type")
+            raise(RuntimeError("Missing Required comment field: hdr_type"))
 
         missing_comment_fields = []
         for key in REQUIRED_HDR_COMMENT_FIELDS[self.header['hdr_type']]:
             if key not in self.header.keys():
                 missing_comment_fields.append(key)
         if missing_comment_fields:
-            raise RuntimeError("Missing required comment fields for {} header type: {}".format(
-                self.header['hdr_type'], ', '.join(missing_comment_fields)))
+            raise(RuntimeError("Missing required comment fields for {} header type: {}".format(
+                self.header['hdr_type'], ', '.join(missing_comment_fields))))
 
         # parse metadata line in file header
         contents = line.split()
         if len(contents) != 5:  # FixMe: this is only stable for LoFASM-filterbank files
-            raise RuntimeError("Unable to parse metadata line: {}".format(line))
+            raise(RuntimeError("Unable to parse metadata line: {}".format(line)))
 
         metadata = {}
         metadata['dim1_len'] = int(contents[0])
@@ -419,14 +419,14 @@ class LofasmFile(object):
         elif int(contents[2]) == 2:
             metadata['complex'] = '2'
         else:
-            raise ValueError("Cannot determine whether data is complex or real.")
+            raise(ValueError("Cannot determine whether data is complex or real."))
 
         metadata['nbits'] = int(contents[3])
 
         if contents[4] in SUPPORTED_ENCODING_SCHEMES:
             metadata['encoding'] = contents[4]
         else:
-            raise RuntimeError("Unsupported encoding scheme: {}".format(contents[4]))
+            raise(RuntimeError("Unsupported encoding scheme: {}".format(contents[4])))
 
         self.header['metadata'] = metadata
 
@@ -536,7 +536,7 @@ class LofasmFile(object):
         elif key == 'freqbins':
             val = self.metadata['dim2_len']
         else:
-            raise AttributeError("LoFASM File class has no attribute {}".format(key))
+            raise(AttributeError("LoFASM File class has no attribute {}".format(key)))
 
         return val
 

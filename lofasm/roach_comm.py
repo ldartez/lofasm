@@ -9,8 +9,8 @@ import numpy as np
 try:
     roach_ip = os.environ['ROACH_IP']
 except KeyError as err:
-    print "ROACH_IP environment variable not set!"
-    print "Defaulting to 192.168.4.21"
+    print("ROACH_IP environment variable not set!")
+    print("Defaulting to 192.168.4.21")
     roach_ip = '192.168.4.21'
 
 #connect to roach board

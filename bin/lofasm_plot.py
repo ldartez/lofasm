@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # LoFASM Data Plotter
 #import matplotlib.pyplot as plt
 #import numpy as np
@@ -41,14 +41,14 @@ if __name__ == '__main__':
     opts, args = p.parse_args(sys.argv[1:])
     
     if not opts.input_filename:
-        print "Please provide the path to the target LoFASM file using -f."
+        print("Please provide the path to the target LoFASM file using -f.")
         exit()
     else:
         input_filename = opts.input_filename
         if input_filename.endswith(".gz") or opts.gzip:
             lofasm_input_file = gzip.open(input_filename, 'r')
         else:
-            lofasm_input_file = open(input_filename, 'rb')
+            lofasm_input_file = open(input_filename, 'r', encoding='latin-1')
         
     hdr_dict = pdat.parse_file_header(lofasm_input_file)
 
@@ -57,15 +57,15 @@ if __name__ == '__main__':
    
     #get starting location (beginning of data)
     if opts.start_position < 0:
-        print "Starting from location 0."
+        print("Starting from location 0.")
         crawler = pdat.LoFASMFileCrawler(opts.input_filename)
         crawler.open()
     else:
-        print "Skipping to specified location: %i" %( opts.start_position)
+        print("Skipping to specified location: %i" %( opts.start_position))
         lofasm_input_file.seek(opts.start_position) #is this still necessary?
         crawler = pdat.LoFASMFileCrawler(opts.input_filename, start_loc=opts.start_position)
         crawler.open()
-        print crawler.getFileHeader()
+        print(crawler.getFileHeader())
         
     burst_size_bytes = opts.packet_size_bytes * 17
     filesize_bytes = pdat.get_filesize(lofasm_input_file)
@@ -73,7 +73,7 @@ if __name__ == '__main__':
 
     #get filesize and exit
     if opts.getFileSize:
-        print pdat.get_filesize(lofasm_input_file)
+        print(pdat.get_filesize(lofasm_input_file))
         exit(0)
 
     #plot single frame of all baselines
@@ -91,6 +91,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         exit()
     except EOFError as err:
-        print err
+        print(err)
         raw_input("press enter to quit.")
 

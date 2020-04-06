@@ -165,7 +165,7 @@ class LofasmFileInfo(object):
         # Check out info_file
         info_file = os.path.join(self.directory_abs_path, self.info_file_name)
         if os.path.isfile(info_file):
-            print "Reading information from info file '%s'." % info_file
+            print("Reading information from info file '%s'." % info_file)
             self.info_table = table.Table.read(info_file, format='ascii.ecsv')
             curr_col = self.info_table.keys()
             # Process the new files.
@@ -298,7 +298,7 @@ class LofasmFileInfo(object):
             return (result_filename, result_value)
         else:
             for d in dirs:
-                print "Checking data directory", d
+                print("Checking data directory", d)
                 subdpath = os.path.join(self.directory_abs_path, d)
                 lfi = LofasmFileInfo(directory=subdpath,                  \
                                      add_col_names=self.add_col_names,    \
@@ -327,7 +327,7 @@ class LofasmFileInfo(object):
                 fs = []
             else:
                 for d in dirs:
-                    print "Checking data directory", d
+                    print("Checking data directory", d)
                     subdpath = os.path.join(self.directory_abs_path, d)
                     lfi = LofasmFileInfo(directory=subdpath,                  \
                                          add_col_names=self.add_col_names,    \

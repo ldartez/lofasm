@@ -8,6 +8,6 @@ def timeit(method):
 		result = method(*args, **kw)
 		te = time()
 
-		print "{}: {}s".format(method.__name__, te-ts)
+		print("{}: {}s".format(method.__name__, te-ts))
 		return result
 	return timed

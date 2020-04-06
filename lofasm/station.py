@@ -37,9 +37,9 @@ class lofasmStation(object):
 
 
         if not isinstance(lat, Latitude):
-            raise TypeError, 'lat must be an instance of astropy.coordinates.Latitude'
+            raise(TypeError('lat must be an instance of astropy.coordinates.Latitude'))
         elif not isinstance(lon, Longitude):
-            raise TypeError, 'lon must be an instance of astropy.coordintes.Latitude'
+            raise(TypeError('lon must be an instance of astropy.coordintes.Latitude'))
 
         self.isNull = False
         self.name = name

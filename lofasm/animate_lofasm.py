@@ -3,7 +3,7 @@
 from matplotlib import animation
 import matplotlib.pyplot as plt
 import numpy as np
-import parse_data as pdat
+from lofasm import parse_data as pdat
 #import lofasm_dat_lib as lofasm
 import sys
 
@@ -80,7 +80,7 @@ def setup_all_plots(xmin, xmax, ymin, ymax, station, crawler, norm_cross=False):
 
     fig.subplots_adjust(hspace=0.5)
 
-	# set titles & plot
+    # set titles & plot
     for i in range(len(cross_baselines)):
 
         if i < 4:
@@ -125,7 +125,7 @@ def update_all_baseline_plots(i, fig, c, lines, norm_cross=False, forward=True):
         try:
             c.forward()
         except EOFError as err:
-            print err
+            print(err)
             raw_input("End of File. Press enter to quit.")
             sys.exit()
 
@@ -139,11 +139,11 @@ def update_all_baseline_plots(i, fig, c, lines, norm_cross=False, forward=True):
 
         elif norm_cross:
 
-			norm_val = np.array(c.cross[BASELINES[k]])/np.sqrt(np.array(c.autos[BASELINES[k][0]*2])*np.array(c.autos[BASELINES[k][1]*2]))
-			lines[k]['real'].set_data(FREQS, np.real(norm_val))
-			lines[k]['imag'].set_data(FREQS, np.imag(norm_val))
+            norm_val = np.array(c.cross[BASELINES[k]])/np.sqrt(np.array(c.autos[BASELINES[k][0]*2])*np.array(c.autos[BASELINES[k][1]*2]))
+            lines[k]['real'].set_data(FREQS, np.real(norm_val))
+            lines[k]['imag'].set_data(FREQS, np.imag(norm_val))
         else:
-			lines[k].set_data(FREQS, 10*np.log10(np.abs(np.real(c.cross[BASELINES[k]]))))
+            lines[k].set_data(FREQS, 10*np.log10(np.abs(np.real(c.cross[BASELINES[k]]))))
 
 
 
