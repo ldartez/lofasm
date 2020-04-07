@@ -123,12 +123,12 @@ def parse_file_header(file_obj, fileType='lofasm'):
         file_obj.seek(0)
 
     #get file signature
-    file_sig = file_obj.read(pdat_H.HDR_ENTRY_LENGTH).strip(' ')
+    file_sig = file_obj.read(pdat_H.HDR_ENTRY_LENGTH)
 
     #check file signature
     if file_sig != pdat_H.LoFASM_FHDR_SIG:
         file_obj.seek(freeze_pointer)
-        raise pdat_H.Header_Error(file_obj.name + 'may not be a proper LoFASM File.',
+        raise pdat_H.Header_Error(file_obj.name + ' may not be a proper LoFASM File.' +
             'File Signature ' + str(file_sig) + ' not recognized.')
 
     #get file header version from file

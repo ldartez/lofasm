@@ -168,12 +168,12 @@ LoFASM_SPECTRUM_HEADER_TEMPLATE = {
 }
 
 
-class Header_Error:
+class Header_Error(Exception):
     def __init__(self, strerror='', msg=None):
         self.strerror = strerror
         self.msg = msg
 
-class IntegrationError:
+class IntegrationError(Exception):
     def __init__(self, strerror=None):
         self.strerror = strerror
     def __str__(self):
