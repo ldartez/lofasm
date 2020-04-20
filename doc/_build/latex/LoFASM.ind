@@ -1,0 +1,27 @@
+\begin{sphinxtheindex}
+\def\bigletter#1{{\Large\sffamily#1}\nopagebreak\vspace{1mm}}
+
+  \bigletter A
+  \item add\_data() (lofasm.bbx.bbx.LofasmFile method), \hyperpage{1}
+
+  \indexspace
+  \bigletter C
+  \item close() (lofasm.bbx.bbx.LofasmFile method), \hyperpage{1}
+
+  \indexspace
+  \bigletter L
+  \item LofasmFile (class in lofasm.bbx.bbx), \hyperpage{1}
+
+  \indexspace
+  \bigletter R
+  \item read\_data() (lofasm.bbx.bbx.LofasmFile method), \hyperpage{1}
+
+  \indexspace
+  \bigletter S
+  \item set() (lofasm.bbx.bbx.LofasmFile method), \hyperpage{1}
+
+  \indexspace
+  \bigletter W
+  \item write() (lofasm.bbx.bbx.LofasmFile method), \hyperpage{1}
+
+\end{sphinxtheindex}

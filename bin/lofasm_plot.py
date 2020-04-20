@@ -48,7 +48,7 @@ if __name__ == '__main__':
         if input_filename.endswith(".gz") or opts.gzip:
             lofasm_input_file = gzip.open(input_filename, 'r')
         else:
-            lofasm_input_file = open(input_filename, 'rb')
+            lofasm_input_file = open(input_filename, 'rb', buffering=0)
         
     hdr_dict = pdat.parse_file_header(lofasm_input_file)
 

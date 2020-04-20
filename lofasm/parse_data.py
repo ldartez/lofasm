@@ -123,12 +123,15 @@ def parse_file_header(file_obj, fileType='lofasm'):
         file_obj.seek(0)
 
     #get file signature
-    file_sig = file_obj.read(pdat_H.HDR_ENTRY_LENGTH)
+    file_sig = str(file_obj.read(pdat_H.HDR_ENTRY_LENGTH))
+    file_sig = file_sig.strip('b\' ')
+    print(file_sig)
+
 
     #check file signature
     if file_sig != pdat_H.LoFASM_FHDR_SIG:
         file_obj.seek(freeze_pointer)
-        raise pdat_H.Header_Error(file_obj.name + ' may not be a proper LoFASM File.' +
+        raise pdat_H.Header_Error(file_obj.name + ' may not be a proper LoFASM File. ' +
             'File Signature ' + str(file_sig) + ' not recognized.')
 
     #get file header version from file
@@ -160,12 +163,12 @@ def parse_file_header(file_obj, fileType='lofasm'):
         for i in range(fields_left_to_populate):
             j = i + 4 #start with 3rd field
             if i == (fields_left_to_populate - 1):
-                fhdr_field_dict[j][1] = remaining_hdr_string[
-                    i*pdat_H.HDR_ENTRY_LENGTH:].strip(' ')
+                fhdr_field_dict[j][1] = str(remaining_hdr_string[
+                    i*pdat_H.HDR_ENTRY_LENGTH:]).strip('b\' ')
             else:
-                fhdr_field_dict[j][1] = remaining_hdr_string[
+                fhdr_field_dict[j][1] = str(remaining_hdr_string[
                     i*pdat_H.HDR_ENTRY_LENGTH:
-                    (i+1)*pdat_H.HDR_ENTRY_LENGTH].strip(' ')
+                    (i+1)*pdat_H.HDR_ENTRY_LENGTH]).strip('b\' ')
     elif file_hdr_version == 3:
         fhdr_field_dict[4][1] = remaining_hdr_string[:8].strip()
         fhdr_field_dict[5][1] = remaining_hdr_string[8:16].strip()
