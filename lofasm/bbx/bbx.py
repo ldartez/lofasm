@@ -72,11 +72,12 @@ class LofasmFile(object):
             try:
                 with gzip.open(self.fpath, self._fmode) as f:
                     gz = True if f.readline() else False
-            except IOError as e:
-                if e.message == 'Not a gzipped file':
+            except OSError as e:
+                print("test: " + str(e.strerror))
+                if e.strerror == 'Not a gzipped file':
                     gz = False
                 else:
-                    raise(IOError, e.message)
+                    raise OSError(e.strerror)
         elif mode == 'write':
             gz = True if gz else False
 

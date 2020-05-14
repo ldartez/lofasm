@@ -100,3 +100,279 @@ Reading test.bbx
 test: False
 (0.119069539011+0j)
 (0.119069538053+0j)
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
+################
+# READTEST: Processing 20161117_015320_AA.bbx #
+################
+datfile: testdata/20161117_015320_AA.dat
+file data shape: (247808,)
+first 5 elements from file: [0. 0. 0. 0. 0.]
+
+WRITE TEST
+cplx_data from file: (102400,) :[ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+real_data from file: (102400,) :[-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+real_data shape: (1024, 100)
+	 first 5 elements: [-0.29020459  0.61199801  0.11133338  1.37303428  0.24737158]
+cplx data shape: (1024, 100)
+	 first 5 elements: [ 0.11906954+0.j  0.53558567+0.j  0.9977219 +0.j -0.28586303+0.j
+  0.96587036+0.j]
+
+WRITETEST:CPLX
+Creating test.bbx
+Added data, first 10 elements: 
+	[ 0.11906954+0.j -0.38654737+0.j  0.29089537+0.j  0.89605909+0.j
+  0.09483536+0.j  0.61519019+0.j  0.9321459 +0.j -0.47074913+0.j
+ -0.79313652+0.j  1.26913359+0.j]
