@@ -53,6 +53,7 @@ class TestLofasmFileReading(unittest.TestCase):
             dat = np.fromfile(datfile)
             self.log.write("file data shape: {}\n".format(str(np.shape(dat))))
             self.log.write("first 5 elements from file: {}\n".format(str(dat[:5])))
+            print("file: " + f)
             lf = LofasmFile(f)
             lf.read_data()
 

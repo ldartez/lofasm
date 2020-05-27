@@ -48,6 +48,7 @@ class LofasmFile(object):
 
         # directory to store data and tmp files
         dataDir = os.path.dirname(os.path.abspath(self.fpath))
+        print("storing data in : " + dataDir)
 
         # validate file open mode
         if mode.lower() not in ('read', 'write'):
@@ -67,23 +68,21 @@ class LofasmFile(object):
         elif mode == 'read':
             assert(os.path.getsize(lofasm_file) > 0), "File is empty"
 
-
         if mode in ['read'] and gz == None:
             try:
                 with gzip.open(self.fpath, self._fmode) as f:
                     gz = True if f.readline() else False
             except OSError as e:
-                print("test: " + str(e.strerror))
-                if e.strerror == 'Not a gzipped file':
+                if str(e)[:18] == 'Not a gzipped file':
                     gz = False
                 else:
-                    raise OSError(e.strerror)
+                    raise OSError(e)
         elif mode == 'write':
             gz = True if gz else False
 
         self.gz = gz
         # final data file
-        #self._fp = gzip.open(self.fpath, self._fmode) if gz else open(self.fpath, self._fmode)
+        self._fp = gzip.open(self.fpath, self._fmode) if gz else open(self.fpath, self._fmode)
         # temporary header and data files
         # create a separate temporary file for header and data portions
         # prepend each tmp file with "unique" random string to avoid
@@ -273,7 +272,8 @@ class LofasmFile(object):
                 fmt = '>{}L'.format(self.dim2_len)
 
             self._debug('parsing real data')
-            nbytes = self.freqbins * self.nbits / 8
+            nbytes = int(self.freqbins * self.nbits / 8)
+            print("nbytes : " + str(nbytes))
             self.data = np.zeros((int(N), int(self.dim2_len)),
                                  dtype=np.float64)
             self.dtype = self.data.dtype
@@ -287,10 +287,11 @@ class LofasmFile(object):
             elif self.nbits == 32:
                 fmt = '>{}l'.format(2*self.dim2_len)
             self._debug('parsing complex data')
-            nbytes = 2 * self.freqbins * self.nbits / 8
+            nbytes = int(2 * self.freqbins * self.nbits / 8)
             self.data = np.zeros((int(N), int(self.dim2_len)), dtype=np.complex128)
             self.dtype = self.data.dtype
             for row in range(N):
+                print(str(nbytes))
                 spec_cmplx = struct.unpack(fmt, self._fp.read(nbytes))
                 i=0
                 for col in range(len(spec_cmplx)/2):
@@ -365,7 +366,8 @@ class LofasmFile(object):
 
     def _load_header(self):
         try:
-            fsig = self._fp.readline().strip()
+            fsig = self._fp.readline().strip().decode('ascii')
+            print("file sig: "+ str(fsig))
             if fsig.startswith('%'):
                 fsig = fsig.strip('%')
             elif self.gz:
@@ -383,14 +385,17 @@ class LofasmFile(object):
 
         # populate header dictionary with header comment fields
         line = self._fp.readline().strip()
-        while line.startswith('%'):
-            contents = line.strip('%').split(":")
+        print("line: " + str(line))
+        while line.startswith(b'%'):
+            contents = line.decode('ascii').strip('%').split(":")
+            print("contents: " + str(contents))
             key = contents[0]
             val = ':'.join(contents[1:])
             self.header[key] = val.strip()
             line = self._fp.readline().strip()
 
         # check for hdr_type field first. This is how we determine what fields are required
+        print(self.header.keys())
         if 'hdr_type' not in self.header.keys():
             raise(RuntimeError("Missing Required comment field: hdr_type"))
 
@@ -424,7 +429,7 @@ class LofasmFile(object):
 
         metadata['nbits'] = int(contents[3])
 
-        if contents[4] in SUPPORTED_ENCODING_SCHEMES:
+        if contents[4].decode('ascii') in SUPPORTED_ENCODING_SCHEMES:
             metadata['encoding'] = contents[4]
         else:
             raise(RuntimeError("Unsupported encoding scheme: {}".format(contents[4])))
@@ -487,6 +492,7 @@ class LofasmFile(object):
 
         missing_keys = []
         for key in REQUIRED_HDR_COMMENT_FIELDS['LoFASM-filterbank']:
+            print("key is: " + str(key))
             if self.header[key] == None:
                 missing_keys.append(key) 
         return missing_keys
@@ -499,20 +505,20 @@ class LofasmFile(object):
         assert (self._validate_header() == []), "Header is not sufficiently populated"
 
         # start file with BBX file signature
-        self._hdr_fp.write("%\x02BX\n")
+        self._hdr_fp.write(b"%\x02BX\n")
 
-        keystowrite = self.header.keys()
-        self._hdr_fp.write("%hdr_type: {}\n".format(self.header['hdr_type']))
+        keystowrite = list(self.header.keys())
+        self._hdr_fp.write("%hdr_type: {}\n".format(self.header['hdr_type']).encode('ascii'))
         keystowrite.remove('hdr_type')
         keystowrite.remove('metadata')
 
         # write all remaining comment fields
         for key in keystowrite:
-            self._hdr_fp.write("%{}: {}\n".format(key, self.header[key]))
+            self._hdr_fp.write("%{}: {}\n".format(key, self.header[key]).encode('ascii'))
 
         # end header with metadata line
         meta = [str(x) for x in [self.dim1_len, self.dim2_len, self.complex, self.nbits, self.encoding]]
-        self._hdr_fp.write("{}\n".format(' '.join(meta)))
+        self._hdr_fp.write("{}\n".format(' '.join(meta)).encode('ascii'))
 
     #################
     # Magic methods #
