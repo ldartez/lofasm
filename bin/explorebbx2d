@@ -80,7 +80,7 @@ class ViewPage(tk.Frame):
         #                            sticky=tk.N+tk.S+tk.E+tk.W)
 
         # create toolbar
-        toolbar = NavigationToolbar2TkAgg(canvas, self)
+        toolbar = NavigationToolbar2Tk(canvas, self)
         toolbar.update()
 
 
