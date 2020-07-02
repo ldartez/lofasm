@@ -17,7 +17,7 @@ SUPPORTED_FILE_SIGNATURES = ['\x02BX', 'ABX', 'BX']
 SUPPORTED_ENCODING_SCHEMES = ['raw256']
 SUPPORTED_HDR_TYPES = ['LoFASM-filterbank', 'LoFASM-dedispersion-dm-time']
 REQUIRED_HDR_COMMENT_FIELDS = {
-    'LoFASM-filterbank': ['hdr_type', 'hdr_version', 'station', 'channel',
+    'LoFASM-filterbank': ['hdr_type', 'station', 'channel',
                           'dim1_start', 'dim1_span', 'dim2_start', 'dim2_span',
                           'data_type'],
     'LoFASM-dedispersion-dm-time': ['hdr_type', 'hdr_version', 'station',
