@@ -170,7 +170,9 @@ class LofasmFile(object):
             
             # update header values to reflect new data block dimensions
             # dim2 is left alone since that holds the frequency axis
-            self.set('dim1_len', self.dim1_len+dim1_bins)
+            new_dim1_len = self.dim1_len+dim1_bins
+            self._debug("updating dim1_len to {}".format(new_dim1_len))
+            self.set('dim1_len', new_dim1_len)
 
             # N reduces to `int(new_bins)` if internal block has been
             # recently dumped and cleared
@@ -180,6 +182,16 @@ class LofasmFile(object):
             newdata[:-data.size] = self.data
             newdata[-data.size:] = data
             self.data = newdata
+
+    def get_data(self):
+        '''reshape data according to dimensions in header and return as new array 
+        '''
+        if self.data.size > 0:
+            Nr = self.header['metadata']['dim1_len']
+            Nc = self.header['metadata']['dim2_len']
+            return self.data.reshape((Nr,Nc))
+        else:
+            return deepcopy(self.data)
 
     def close(self):
         """
@@ -215,8 +227,6 @@ class LofasmFile(object):
             # clean up temporary files
             os.remove(self._hdr_fname)
             os.remove(self._data_fname)
-
-
         else:
             raise(NotImplementedError("unknown file mode: {}".format(self.mode)))
 
@@ -262,8 +272,6 @@ class LofasmFile(object):
             N = self.dim1_len - self.ptr
             self.ptr = self.dim1_len
         
-
-
         # real data
         if not self.iscplx:
             if self.nbits == 64:
@@ -273,7 +281,6 @@ class LofasmFile(object):
 
             self._debug('parsing real data')
             nbytes = int(self.freqbins * self.nbits / 8)
-            print("nbytes : " + str(nbytes))
             self.data = np.zeros((int(N), int(self.dim2_len)),
                                  dtype=np.float64)
             self.dtype = self.data.dtype
@@ -291,12 +298,12 @@ class LofasmFile(object):
             self.data = np.zeros((int(N), int(self.dim2_len)), dtype=np.complex128)
             self.dtype = self.data.dtype
             for row in range(N):
-                print(str(nbytes))
                 spec_cmplx = struct.unpack(fmt, self._fp.read(nbytes))
                 i=0
                 for col in range(len(spec_cmplx)/2):
                     self.data[row, col] = np.complex64(complex(spec_cmplx[i], spec_cmplx[i+1]))
                     i += 2
+        self.data = self.data.flatten()
 
     def set(self, key, val):
         """Set header or metadata fields
@@ -334,7 +341,7 @@ class LofasmFile(object):
         missing_keys = self._validate_header()
         if missing_keys:
             errmsg = "header missing required fields: {}".format(', '.join(missing_keys))
-            raise(RuntimeError, errmsg)
+            self._debug(errmsg)
 
 
         N = self.data.size
@@ -385,17 +392,14 @@ class LofasmFile(object):
 
         # populate header dictionary with header comment fields
         line = self._fp.readline().strip()
-        print("line: " + str(line))
         while line.startswith(b'%'):
             contents = line.decode('ascii').strip('%').split(":")
-            print("contents: " + str(contents))
             key = contents[0]
             val = ':'.join(contents[1:])
             self.header[key] = val.strip()
             line = self._fp.readline().strip()
 
         # check for hdr_type field first. This is how we determine what fields are required
-        print(self.header.keys())
         if 'hdr_type' not in self.header.keys():
             raise(RuntimeError("Missing Required comment field: hdr_type"))
 
@@ -544,7 +548,6 @@ class LofasmFile(object):
             val = self.metadata['dim2_len']
         else:
             raise(AttributeError("LoFASM File class has no attribute {}".format(key)))
-
         return val
 
 # a light function to check if a file in lofasm bbx format.
