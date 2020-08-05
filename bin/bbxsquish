@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import matplotlib.pyplot as plt
 import numpy as np
 from lofasm.bbx import bbx
 from glob import glob
@@ -21,7 +20,7 @@ if __name__ == "__main__":
     args = p.parse_args()
     def logmsg(x):
         if args.verbose:
-            sys.stderr.write(str(x))
+            sys.stderr.write(str(x)+'\n')
 
     stepSize = args.stepsize #collect every Nth sample
     if args.output == '-':
@@ -65,20 +64,26 @@ if __name__ == "__main__":
         logmsg("Starting file {}".format(lfx.fname))
         NrowsInFile = lfx.header['metadata']['dim1_len']
         logmsg("Rows in file: {}".format(NrowsInFile))
-        lfx.read_data()
-        data = lfx.get_data()
-        lfx.close() # free resources
-        ii = offset
-        logmsg("offset: {}".format(offset))
-        while True:
-            drow = data[ii,:]
-            lfout.add_data(drow)
-            ii += stepSize
-            if ii > NrowsInFile - 1:
-                #EOF
-                offset = ii - NrowsInFile
-                logmsg("EOF offset: {}".format(offset))
-                break
+        if offset > NrowsInFile-1: #skip this file
+            logmsg("Skipping {}: offset ({}) > N ({})".format(lfx.fname, offset, NrowsInFile))
+            offset = offset - NrowsInFile
+            lfx.close() # free resources
+            continue
+        else:
+            lfx.read_data()
+            ii = offset
+            data = lfx.get_data()
+            lfx.close() # free resources
+            logmsg("offset: {}".format(offset))
+            while True:
+                drow = data[ii,:]
+                lfout.add_data(drow)
+                ii += stepSize
+                if ii > NrowsInFile - 1:
+                    #EOF
+                    offset = ii - NrowsInFile
+                    logmsg("EOF offset: {}".format(offset))
+                    break
     else:
         # correct time span if there's an offset
         if offset:
