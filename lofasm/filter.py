@@ -97,15 +97,18 @@ def running_minimum(x, r=50, axis=0):
 
     return y
 
-def DynamicRangeScaleTime(data, mu=10.e3):
+def DynamicRangeScaleTime(data, mu=1000.):
     '''Murat's rescaling
     '''
+    # protect against 0/0
+    if mu == 0.:
+        mu = 0.000001
     Mu = mu
     data = np.array(data)
     Nr, Nc = data.shape
     result = np.zeros_like(data)
     for i in range(Nr):
-        result[i,:] = data[i,:] / np.sqrt(abs(data[i,:])**2 + Mu**2)
+        result[i,:] = data[i,:] / np.sqrt(np.abs(data[i,:])**2 + Mu**2)
     return result
 
 def RunningAverageTime(data, r):

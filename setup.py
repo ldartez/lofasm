@@ -38,7 +38,8 @@ setup(
              'bin/clean_data.py',
              'bin/calibrate_plot.py',
              'bin/explorebbx2d',
-             'bin/bbxsquish'],
+             'bin/bbxsquish',
+             'bin/dynamicRescale'],
 
     description='LoFASM Tools',
     long_description=open('README.md').read(),
