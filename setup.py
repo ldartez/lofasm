@@ -37,7 +37,8 @@ setup(
              'bin/normalize_data.py',
              'bin/clean_data.py',
              'bin/calibrate_plot.py',
-             'bin/explorebbx2d'],
+             'bin/explorebbx2d',
+             'bin/bbxsquish'],
 
     description='LoFASM Tools',
     long_description=open('README.md').read(),
