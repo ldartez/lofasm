@@ -188,8 +188,10 @@ class LofasmFile(object):
         '''reshape data according to dimensions in header and return as new array 
         '''
         if self.data.size > 0:
-            Nr = self.header['metadata']['dim1_len']
             Nc = self.header['metadata']['dim2_len']
+            if self.data.size % Nc:
+                raise RuntimeError("Mismatch in internal data housekeeping: Ncols * Nrows =/= data.size")
+            Nr = self.data.size // Nc
             return self.data.reshape((Nr,Nc))
         else:
             return deepcopy(self.data)
@@ -263,7 +265,6 @@ class LofasmFile(object):
             If file is not open for reading
         """
 
-
         assert(self.mode == 'read'), "File not open for reading."
 
         if not N is None:
@@ -278,8 +279,9 @@ class LofasmFile(object):
             elif N+self.ptr <= self.dim1_len:
                 self.ptr = N+self.ptr
         else:
-            N = self.dim1_len - self.ptr
-            self.ptr = self.dim1_len
+            self._debug("Reading {} rows from file".format(N))
+            N = self.dim1_len - self.ptr # rows remaining after read operation
+            self.ptr = self.dim1_len # new pointer location after read operation
         
         # real data
         if not self.iscplx:
@@ -377,7 +379,7 @@ class LofasmFile(object):
     ###################
     def _debug(self, msg):
         if self.debug:
-            print(msg)
+            sys.stderr.write(msg + '\n')
             sys.stderr.flush()
 
     def _load_header(self):
