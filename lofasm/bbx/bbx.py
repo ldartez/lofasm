@@ -34,21 +34,14 @@ class LofasmFile(object):
     """Class to represent .bbx-type data files for LoFASM.
     Currently, the only data format supported is 'LoFASM-filterbank'.
     """
-    def __init__(self, lofasm_file, header={'metadata':{}}, verbose=False,
+    def __init__(self, lofasm_file=sys.stdout.buffer, header={'metadata':{}}, verbose=False,
                  mode='read', gz=None):
 
         self.debug = True if verbose else False
         self.header = deepcopy(header)
-
         self.iscplx = None
-        self.fpath = lofasm_file
-        self.fname = os.path.basename(lofasm_file)
         self.ptr = 0 # pointer location (dim1)
         self._uniqueKey = randomString(10) 
-
-        # directory to store data and tmp files
-        dataDir = os.path.dirname(os.path.abspath(self.fpath))
-        print("storing data in : " + dataDir)
 
         # validate file open mode
         if mode.lower() not in ('read', 'write'):
@@ -61,46 +54,54 @@ class LofasmFile(object):
                 self._fmode = 'wb'
             self.mode = mode
 
-        # check existence of file
-        if not os.path.exists(lofasm_file):
-            if mode == 'read':
-                raise RuntimeError("File does not exist: " + str(lofasm_file))
-        elif mode == 'read':
-            assert(os.path.getsize(lofasm_file) > 0), "File is empty"
+        if lofasm_file == sys.stdout.buffer:
+            self._debug("New LoFASM BBX Object: stdout")
+            mode = 'write'
+            self._fp = sys.stdout.buffer
+        else:
+            self._debug("New LoFASM BBX Object: {}".format(lofasm_file))
+            self.fpath = lofasm_file
+            self.fname = os.path.basename(lofasm_file)
+            # directory to store data and tmp files
+            # check existence of file
+            if not os.path.exists(lofasm_file):
+                if mode == 'read':
+                    raise RuntimeError("File does not exist: " + str(lofasm_file))
+            elif mode == 'read':
+                assert(os.path.getsize(lofasm_file) > 0), "File is empty"
 
-        if mode in ['read'] and gz == None:
-            try:
-                with gzip.open(self.fpath, self._fmode) as f:
-                    gz = True if f.readline() else False
-            except OSError as e:
-                if str(e)[:18] == 'Not a gzipped file':
-                    gz = False
-                else:
-                    raise OSError(e)
-        elif mode == 'write':
-            gz = True if gz else False
-
-        self.gz = gz
-        # final data file
-        self._fp = gzip.open(self.fpath, self._fmode) if gz else open(self.fpath, self._fmode)
-        # temporary header and data files
-        # create a separate temporary file for header and data portions
-        # prepend each tmp file with "unique" random string to avoid
-        # having multiple instances of this object overwrite each other
-        self._hdr_fname = join(dataDir,'.'+self._uniqueKey+'.hdr')
-        self._data_fname = join(dataDir, '.'+self._uniqueKey+'.dat')
-        self._hdr_fp = open(self._hdr_fname, 'wb')
-        self._data_fp = open(self._data_fname, 'wb')
-
+            if mode in ['read'] and gz == None:
+                try:
+                    with gzip.open(self.fpath, self._fmode) as f:
+                        gz = True if f.readline() else False
+                except OSError as e:
+                    if str(e)[:18] == 'Not a gzipped file':
+                        gz = False
+                    else:
+                        raise OSError(e)
+            elif mode == 'write':
+                gz = bool(gz)
+            self.gz = gz
+            # handle for output file
+            self._fp = gzip.open(self.fpath, self._fmode) if self.gz else open(self.fpath, self._fmode)
+        
         if mode in ['read']:
-            self._fp = gzip.open(self.fpath, self._fmode) if gz else open(self.fpath, self._fmode)
             self._load_header()
         elif mode == 'write':
+            self._fout = self._fp
+            # temporary header and data files
+            # create a separate temporary file for header and data portions
+            # prepend each tmp file with "unique" random string to avoid
+            # having multiple instances of this object overwrite each other
+            self._hdr_fname = join(os.getcwd(),'.'+self._uniqueKey+'.hdr')
+            self._data_fname = join(os.getcwd(), '.'+self._uniqueKey+'.dat')
+            self._debug("HDR temp file: {}".format(self._hdr_fname))
+            self._debug("DATA temp file: {}".format(self._data_fname))
+            self._hdr_fp = open(self._hdr_fname, 'wb')
+            self._data_fp = open(self._data_fname, 'wb')
             self._debug("prepping file")
-            self._prep_new()
+            self._prep_new() #new header
             self.data = np.array([], dtype=np.float64)
-
-        # private copy of certain methods
         self._set = self.set
 
     ###############################
@@ -203,6 +204,8 @@ class LofasmFile(object):
         gzip the result if requested.
         """
 
+        if 'data' in self.__dict__.keys():
+            del self.data
         if self.mode == 'read':
             self._fp.close()
         elif self.mode == 'write':
@@ -216,19 +219,25 @@ class LofasmFile(object):
             # there are simpler ways to do this.
             # but this approach will handle both normal and 
             # compressed output files
-            fout = gzip.open(self.fpath, self._fmode) if self.gz else open(self.fpath, self._fmode)
-            f_hdr = open(self._hdr_fname, 'rb')
-            f_dat = open(self._data_fname, 'rb')
-            copyfileobj(f_hdr, fout)
-            copyfileobj(f_dat, fout)
-            fout.close()
+            with open(self._hdr_fname, 'rb',buffering=0) as f_hdr:
+                with open(self._data_fname, 'rb', buffering=0) as f_dat:
+                    if self._fout == sys.stdout:
+                        self._fout.write(f_hdr.read())
+                        for line in f_dat:
+                            self._fout.write(line)
+                    else:
+                        copyfileobj(f_hdr, self._fout)
+                        copyfileobj(f_dat, self._fout)
+                        self._fout.close()
             f_hdr.close()
             f_dat.close()
             # clean up temporary files
-            os.remove(self._hdr_fname)
-            os.remove(self._data_fname)
-        else:
-            raise(NotImplementedError("unknown file mode: {}".format(self.mode)))
+            if os.path.exists(self._hdr_fname):
+                os.remove(self._hdr_fname)
+            if os.path.exists(self._data_fname):
+                os.remove(self._data_fname)
+            else:
+                raise(NotImplementedError("unknown file mode: {}".format(self.mode)))
 
     def read_data(self, N=None):
         """Parse data block in LoFASM filterbank file and load into 
@@ -300,7 +309,7 @@ class LofasmFile(object):
             for row in range(N):
                 spec_cmplx = struct.unpack(fmt, self._fp.read(nbytes))
                 i=0
-                for col in range(len(spec_cmplx)/2):
+                for col in range(len(spec_cmplx)//2):
                     self.data[row, col] = np.complex64(complex(spec_cmplx[i], spec_cmplx[i+1]))
                     i += 2
         self.data = self.data.flatten()
@@ -356,7 +365,7 @@ class LofasmFile(object):
                 cplxdata[i] = self.data[k].real
                 cplxdata[i+1] = self.data[k].imag
                 i += 2
-            self._fp.write(struct.pack(cplxfmt, *cplxdata))
+            self._data_fp.write(struct.pack(cplxfmt, *cplxdata))
         else:
             self._debug("Writing real data")
             self._data_fp.write(struct.pack(realfmt, *self.data))
@@ -369,12 +378,12 @@ class LofasmFile(object):
     def _debug(self, msg):
         if self.debug:
             print(msg)
-            sys.stdout.flush()
+            sys.stderr.flush()
 
     def _load_header(self):
         try:
             fsig = self._fp.readline().strip().decode('ascii')
-            print("file sig: "+ str(fsig))
+            self._debug("file sig: "+ str(fsig))
             if fsig.startswith('%'):
                 fsig = fsig.strip('%')
             elif self.gz:
@@ -397,7 +406,7 @@ class LofasmFile(object):
             key = contents[0]
             val = ':'.join(contents[1:])
             self.header[key] = val.strip()
-            line = self._fp.readline().strip()
+            line = self._fp.readline().strip() # read next line
 
         # check for hdr_type field first. This is how we determine what fields are required
         if 'hdr_type' not in self.header.keys():
@@ -412,7 +421,7 @@ class LofasmFile(object):
                 self.header['hdr_type'], ', '.join(missing_comment_fields))))
 
         # parse metadata line in file header
-        contents = line.split()
+        contents = line.decode('ascii').split()
         if len(contents) != 5:  # FixMe: this is only stable for LoFASM-filterbank files
             raise(RuntimeError("Unable to parse metadata line: {}".format(line)))
 
@@ -433,7 +442,7 @@ class LofasmFile(object):
 
         metadata['nbits'] = int(contents[3])
 
-        if contents[4].decode('ascii') in SUPPORTED_ENCODING_SCHEMES:
+        if contents[4] in SUPPORTED_ENCODING_SCHEMES:
             metadata['encoding'] = contents[4]
         else:
             raise(RuntimeError("Unsupported encoding scheme: {}".format(contents[4])))
@@ -496,7 +505,6 @@ class LofasmFile(object):
 
         missing_keys = []
         for key in REQUIRED_HDR_COMMENT_FIELDS['LoFASM-filterbank']:
-            print("key is: " + str(key))
             if self.header[key] == None:
                 missing_keys.append(key) 
         return missing_keys

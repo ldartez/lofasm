@@ -57,10 +57,10 @@ class ViewPage(tk.Frame):
 
         #bbxdata = 10*np.log10(self.bbxfile.data.transpose())
         if self.bbxfile.iscplx:
-            bbxdata = 10*np.log10(np.abs(self.bbxfile.data)**2)
+            bbxdata = 10*np.log10(np.abs(self.bbxfile.get_data())**2)
             print("Plotting the absolute value squared of complex data.")
         else:
-            bbxdata = 10*np.log10(self.bbxfile.data)
+            bbxdata = 10*np.log10(self.bbxfile.get_data())
 
 
         # calculate step size for each dim
